@@ -60,7 +60,7 @@ public class TeamController {
         List<Team> teamList = teamService.findAllTeams();
         
         // 팀 목록과 함께 200 OK 상태 코드 반환
-        return ResponseEntity.ok(teamList);
+        return ResponseEntity.ok(teamList); // HTTP 200 OK 상태 코드와 함께 팀 목록을 응답 본문으로 반환합니다. 
     }
     
     // HTTP POST 요청 처리 메서드 (기본 경로에 매핑)
@@ -78,3 +78,32 @@ public class TeamController {
         return ResponseEntity.status(HttpStatus.CREATED).body(team);
     }
 }
+
+/**
+ResponseEntity는 Spring Framework에서 제공하는 클래스로, HTTP 응답을 표현하는데 사용됩니다. 
+이 클래스는 HTTP 응답의 세 가지 핵심 요소를 포함합니다:
+
+- 상태 코드(Status Code) - HTTP 응답 상태 코드(예: 200 OK, 404 Not Found, 500 Internal Server Error 등)
+- 헤더(Headers) - HTTP 응답 헤더 정보
+- 본문(Body) - 응답 데이터 자체
+
+@SecurityScheme과 @Operation의 관계
+정의와 참조의 관계:
+@SecurityScheme는 보안 방식을 정의합니다.
+@Operation의 security 속성은 이미 정의된 보안 방식을 참조합니다.
+
+범위:
+@SecurityScheme는 클래스 레벨에 적용되어 전역적으로 보안 방식을 정의합니다.
+@Operation의 security 속성은 메서드 레벨에서 특정 API에 보안 요구사항을 적용합니다.
+
+@Operation(security = @SecurityRequirement(name = "bearerAuth"))가 메서드 위에 붙어 있으면, 
+해당 구문은 Swagger 문서에서 "이 특정 API 엔드포인트는 'bearerAuth'라는 이름의 보안 방식이 필요하다"고 표시합니다.
+
+예를 들어:
+@GetMapping
+@Operation(security = @SecurityRequirement(name = "bearerAuth"))
+public ResponseEntity<List<Team>> findAllTeams() { ... }
+이렇게 하면 Swagger UI에서 /api/baseball/teams GET 엔드포인트에 대해 "이 API를 호출하려면 JWT Bearer 토큰이 필요합니다"라고 명시됩니다.
+"메서드 레벨에서 적용"이라는 말은 클래스 전체가 아닌 특정 메서드(여기서는 findAllTeams())에만 이 보안 요구사항이 적용된다는 의미입니다. 
+따라서 같은 컨트롤러의 다른 메서드에는 다른 보안 요구사항을 적용하거나 보안 요구사항이 없게 할 수도 있습니다.
+**/
