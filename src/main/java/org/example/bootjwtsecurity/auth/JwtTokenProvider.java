@@ -28,8 +28,8 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Authentication authentication) {
-        String username = authentication.getName(); // UUID
-        Instant now = Instant.now(); // UTC
+        String username = authentication.getName(); 
+        Instant now = Instant.now(); 
         Date expiryDate = new Date(now.toEpochMilli() + expirationMs);
         return Jwts.builder()
                 .subject(username)
