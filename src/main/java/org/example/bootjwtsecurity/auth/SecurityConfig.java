@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-@EnableWebSecurity // Filter용
-@RequiredArgsConstructor // 의존성 주입
+@EnableWebSecurity 
+@RequiredArgsConstructor 
 public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
@@ -29,20 +29,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-//                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**")) // REST API 무시하겠다...
-//                .cors()
+                .csrf(AbstractHttpConfigurer::disable) 
                 .sessionManagement(sm ->
                         sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                        sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(
 auth ->
                     auth
                             .requestMatchers("/swagger-ui/**","/v3/api-docs/**")
-                                .permitAll() // Swagger는 다 접근 시켜
-                            .requestMatchers("/api/auth/**") // 가입, 로그인.
-                                .permitAll() // Refresh Token 이라... 하...
-                            .anyRequest() // /api/나머지
+                                .permitAll()
+                            .requestMatchers("/api/auth/**") 
+                                .permitAll() 
+                            .anyRequest()
                                 .authenticated()
                 )
                 .authenticationProvider(daoAuthProvider())
@@ -61,7 +58,6 @@ auth ->
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
         return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // ?
     }
 
