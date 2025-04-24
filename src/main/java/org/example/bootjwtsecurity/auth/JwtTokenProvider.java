@@ -61,8 +61,7 @@ public class JwtTokenProvider {
                     .parseSignedClaims(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            return false; // catch해주지 않으면...
-            // 작동하다가 삑!하면서 스탑된다
+            return false; 
         }
     }
 }
